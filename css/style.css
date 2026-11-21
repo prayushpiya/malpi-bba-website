@@ -1,0 +1,2569 @@
+/* ==========================================================================
+   MALPI INTERNATIONAL COLLEGE — Global Stylesheet
+   --------------------------------------------------------------------------
+   Built for later migration into an Elementor/WordPress theme.
+   LAYOUT RULE: flexbox only. No CSS Grid anywhere in this file, so that every
+   section maps 1:1 onto an Elementor Flex Container.
+   --------------------------------------------------------------------------
+   CONTENTS
+     01. Design tokens
+     02. Reset & base
+     03. Typography
+     04. Layout primitives (container / section / row / col)
+     05. Buttons & links
+     06. Site header & navigation
+     07. Hero
+     08. Section heading & eyebrow
+     09. Cards, icon boxes, stats
+     10. Programs
+     11. People (team)
+     12. Partner logos
+     13. Accordion (FAQ)
+     14. Video testimonials
+     15. Tables
+     16. Forms
+     17. Page header & breadcrumb
+     18. CTA band
+     19. Gallery
+     20. Site footer
+     21. Utilities
+     22. Responsive
+     23. Motion & print preferences
+   ========================================================================== */
+
+
+/* ==========================================================================
+   01. DESIGN TOKENS
+   Colours are taken directly from the official logo artwork (MIC Logo.svg):
+   gold #FCB615, green #01663E, near-black #221F1F.
+   ========================================================================== */
+:root {
+  /* --- Brand --- */
+  --mic-green:        #01663E;  /* primary brand green, straight from the logo */
+  --mic-green-dark:   #013D26;  /* deep field for header bars / footer         */
+  --mic-green-darker: #012418;  /* deepest, for footer base                    */
+  --mic-green-light:  #E6F0EB;  /* pale green wash for alternating sections    */
+  --mic-green-mid:    #2E9E6B;  /* lighter green for on-dark text              */
+  --mic-gold:         #FCB615;  /* accent — CTAs, numbers, rules               */
+  --mic-gold-dark:    #E0A00C;  /* gold hover                                  */
+  --mic-gold-soft:    #FFF6E0;  /* pale gold wash                              */
+  --mic-gold-deep:    #C0790A;  /* gold dark enough for icons on white (3.5:1) */
+
+  /* --- Neutrals --- */
+  --ink:              #1A1A1A;
+  --ink-soft:         #4A4A4A;
+  --ink-muted:        #6B6B6B;
+  --line:             #E2E2DE;
+  --line-strong:      #CFCFC9;
+  --surface:          #FFFFFF;
+  --surface-alt:      #F7F7F4;
+  --surface-warm:     #FBF9F4;
+
+  /* --- Feedback --- */
+  --error:            #B3261E;
+  --success:          #1B6B3A;
+
+  /* --- Typography --- */
+  --font-display: "Jost", "Futura", "Century Gothic", "Trebuchet MS", sans-serif;
+  --font-body:    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  /* Fluid type scale */
+  --fs-xs:   0.8125rem;                              /* 13px */
+  --fs-sm:   0.875rem;                               /* 14px */
+  --fs-base: 1rem;                                   /* 16px, never smaller for body */
+  --fs-md:   1rem;
+  --fs-lg:   clamp(1.0625rem, 0.25vw + 1rem, 1.125rem);
+  --fs-h4:   clamp(1.0625rem, 0.35vw + 1rem, 1.1875rem);
+  --fs-h3:   clamp(1.1875rem, 0.6vw + 1.05rem, 1.4375rem);
+  --fs-h2:   clamp(1.4375rem, 1.2vw + 1.05rem, 1.875rem);
+  --fs-h1:   clamp(1.75rem, 2.2vw + 1.05rem, 2.5rem);
+  --fs-hero: clamp(1.9375rem, 2.8vw + 1.05rem, 3rem);
+
+  /* --- Spacing scale --- */
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-5:  1.5rem;
+  --space-6:  2rem;
+  --space-7:  2.5rem;
+  --space-8:  3rem;
+  --space-9:  4rem;
+  --space-10: 5rem;
+  --space-11: 6rem;
+
+  /* --- Structure --- */
+  --container:      1200px;
+  --container-slim: 860px;
+  --radius-sm: 4px;
+  --radius:    8px;
+  --radius-lg: 14px;
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow:    0 4px 16px rgba(0,0,0,.07);
+  --shadow-lg: 0 14px 40px rgba(1,61,38,.14);
+
+  --transition: 220ms cubic-bezier(.4,0,.2,1);
+  --header-h: 88px;
+}
+
+
+/* ==========================================================================
+   02. RESET & BASE
+   ========================================================================== */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h) + 16px);
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  line-height: 1.65;
+  color: var(--ink);
+  background: var(--surface);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+svg { display: block; }
+
+/* Skip link — first focusable element on every page */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 999;
+  background: var(--mic-gold);
+  color: var(--ink);
+  padding: var(--space-3) var(--space-5);
+  font-weight: 600;
+  border-radius: 0 0 var(--radius) 0;
+}
+.skip-link:focus { left: 0; }
+
+/* Global visible focus ring — never removed */
+:focus-visible {
+  outline: 3px solid var(--mic-gold);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+.on-dark :focus-visible { outline-color: var(--mic-gold); }
+
+::selection { background: var(--mic-gold); color: var(--ink); }
+
+
+/* ==========================================================================
+   03. TYPOGRAPHY
+   ========================================================================== */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--mic-green-dark);
+  margin: 0 0 var(--space-4);
+  text-wrap: balance;
+}
+h1 { font-size: var(--fs-h1); letter-spacing: -0.025em; }
+h2 { font-size: var(--fs-h2); letter-spacing: -0.02em; }
+h3 { font-size: var(--fs-h3); }
+h4 { font-size: var(--fs-h4); }
+h5 { font-size: var(--fs-lg); }
+h6 { font-size: var(--fs-base); text-transform: uppercase; letter-spacing: .08em; }
+
+p { margin: 0 0 var(--space-4); text-wrap: pretty; }
+p:last-child { margin-bottom: 0; }
+
+.lead {
+  font-size: var(--fs-lg);
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+a { color: var(--mic-green); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { color: var(--mic-green-dark); }
+
+strong, b { font-weight: 600; color: var(--ink); }
+
+ul, ol { margin: 0 0 var(--space-4); padding-left: 1.25rem; }
+li { margin-bottom: var(--space-2); }
+li:last-child { margin-bottom: 0; }
+
+/* Checklist: a bulleted list with gold ticks.
+   One pseudo-element carrying an SVG tick, so the mark stays centred at any
+   font size instead of relying on a rotated border. */
+.list-check { list-style: none; padding-left: 0; }
+.list-check li {
+  position: relative;
+  padding-left: 2.125rem;
+  margin-bottom: var(--space-3);
+}
+.list-check li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  /* centres the marker on the first line of text (line-height 1.65) */
+  top: calc(0.825em - 0.625rem);
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  background-color: var(--mic-gold);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%231A1A1A' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round' d='M3.5 8.4l3 3 6-6.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 0.8rem 0.8rem;
+}
+
+blockquote {
+  margin: var(--space-6) 0;
+  padding: var(--space-5) var(--space-6);
+  border-left: 4px solid var(--mic-gold);
+  background: var(--surface-warm);
+  font-size: var(--fs-lg);
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+blockquote p:last-child { margin-bottom: 0; }
+
+
+/* ==========================================================================
+   04. LAYOUT PRIMITIVES
+   .row / .col use flexbox with percentage widths — the direct analogue of an
+   Elementor Flex Container with sized child containers.
+   ========================================================================== */
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+}
+.container--slim { max-width: var(--container-slim); }
+
+.section { padding-block: var(--space-9); }
+.section--lg  { padding-block: var(--space-10); }
+.section--sm  { padding-block: var(--space-7); }
+.section--alt  { background: var(--surface-alt); }
+.section--warm { background: var(--surface-warm); }
+.section--mint { background: var(--mic-green-light); }
+.section--green {
+  background: var(--mic-green-dark);
+  color: rgba(255,255,255,.86);
+}
+.section--green h1, .section--green h2,
+.section--green h3, .section--green h4 { color: #fff; }
+
+.row {
+  --row-gap: var(--space-6);   /* columns subtract from this, so any gap works */
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--row-gap);
+}
+.row--tight { --row-gap: var(--space-4); }
+.row--wide  { --row-gap: var(--space-8); }
+.row--middle { align-items: center; }
+.row--center { justify-content: center; }
+/* Keeps wrapped remainders the same width as a full line (e.g. 5 cards = 3 + 2)
+   instead of letting the last row stretch. The attribute selector raises
+   specificity above the .col-* flex shorthand set in the media queries. */
+.row--even > [class*="col-"] { flex-grow: 0; }
+
+/* Column widths. Mobile-first: every column is full width until 768px (§22). */
+.col       { flex: 1 1 100%; min-width: 0; }
+.col-half  { flex: 1 1 100%; min-width: 0; }
+.col-third { flex: 1 1 100%; min-width: 0; }
+.col-two-thirds { flex: 1 1 100%; min-width: 0; }
+.col-quarter    { flex: 1 1 100%; min-width: 0; }
+.col-fifth      { flex: 1 1 100%; min-width: 0; }
+
+
+/* ==========================================================================
+   05. BUTTONS & LINKS
+   ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 48px;              /* touch target ≥ 44px */
+  padding: var(--space-3) var(--space-6);
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  border: 2px solid transparent;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background-color var(--transition), color var(--transition),
+              border-color var(--transition), transform var(--transition),
+              box-shadow var(--transition);
+}
+.btn:hover { transform: translateY(-2px); }
+.btn:active { transform: translateY(0); }
+
+/* Gold CTA — always dark text on gold for contrast (never white) */
+.btn--primary {
+  background: var(--mic-gold);
+  border-color: var(--mic-gold);
+  color: var(--ink);
+}
+.btn--primary:hover {
+  background: var(--mic-gold-dark);
+  border-color: var(--mic-gold-dark);
+  color: var(--ink);
+  box-shadow: 0 6px 18px rgba(252,182,21,.35);
+}
+
+.btn--green {
+  background: var(--mic-green);
+  border-color: var(--mic-green);
+  color: #fff;
+}
+.btn--green:hover {
+  background: var(--mic-green-dark);
+  border-color: var(--mic-green-dark);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(1,102,62,.28);
+}
+
+.btn--outline {
+  background: transparent;
+  border-color: var(--mic-green);
+  color: var(--mic-green);
+}
+.btn--outline:hover {
+  background: var(--mic-green);
+  color: #fff;
+}
+
+/* On dark backgrounds */
+.btn--ghost-light {
+  background: transparent;
+  border-color: rgba(255,255,255,.55);
+  color: #fff;
+}
+.btn--ghost-light:hover {
+  background: #fff;
+  border-color: #fff;
+  color: var(--mic-green-dark);
+}
+
+.btn--block { width: 100%; }
+.btn--sm { min-height: 44px; padding: var(--space-2) var(--space-4); font-size: var(--fs-sm); }
+/* The header CTA must stay on one line — "Apply / Now" reads as two things */
+.site-header__actions .btn { white-space: nowrap; }
+
+/* Text link with a gold arrow — used on cards */
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--fs-md);
+  color: var(--mic-green);
+  text-decoration: none;
+  min-height: 44px;
+}
+.link-arrow .link-arrow__icon {
+  display: inline-block;
+  transition: transform var(--transition), color var(--transition);
+  color: inherit;              /* gold on white is too low-contrast to read */
+  font-size: 1.15em;
+}
+.link-arrow:hover { color: var(--mic-green-dark); text-decoration: underline; }
+.link-arrow:hover .link-arrow__icon { transform: translateX(4px); }
+
+
+/* ==========================================================================
+   06. SITE HEADER & NAVIGATION
+   ========================================================================== */
+/* Thin utility bar above the main header */
+.topbar {
+  background: var(--mic-green-darker);
+  color: rgba(255,255,255,.82);
+  font-size: var(--fs-xs);
+}
+.topbar__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-block: var(--space-2);
+}
+.topbar__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.topbar__list li { margin: 0; }
+.topbar a {
+  color: rgba(255,255,255,.82);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  white-space: nowrap;      /* a phone number must never break across lines */
+}
+/* phone and email icons only: the social glyphs below are solid fills and
+   must not inherit this outline treatment */
+.topbar__list svg { width: 14px; height: 14px; stroke: var(--mic-gold); fill: none; stroke-width: 1.8; flex-shrink: 0; }
+.topbar a:hover { color: var(--mic-gold); text-decoration: underline; }
+.topbar__socials { display: flex; gap: var(--space-3); }
+.topbar__socials a {
+  width: 32px; height: 32px;
+  align-items: center; justify-content: center;
+  border-radius: 50%;
+}
+.topbar__socials a:hover { background: rgba(255,255,255,.12); color: var(--mic-gold); }
+.topbar__socials svg { width: 16px; height: 16px; fill: currentColor; stroke: none; }
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  transition: box-shadow var(--transition);
+}
+.site-header.is-stuck { box-shadow: var(--shadow); }
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  min-height: var(--header-h);
+  padding-block: var(--space-3);
+}
+
+.site-logo { display: inline-flex; align-items: center; flex-shrink: 0; }
+.site-logo img { width: auto; height: 44px; }
+@media (min-width: 600px) { .site-logo img { height: 52px; } }
+
+/* --- Primary navigation --- */
+.nav-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px; height: 48px;
+  background: transparent;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  cursor: pointer;
+  color: var(--mic-green-dark);
+}
+.nav-toggle:hover { background: var(--surface-alt); }
+.nav-toggle__bars, .nav-toggle__bars::before, .nav-toggle__bars::after {
+  display: block;
+  width: 22px; height: 2px;
+  background: currentColor;
+  border-radius: 2px;
+  transition: transform var(--transition), opacity var(--transition);
+}
+.nav-toggle__bars { position: relative; }
+.nav-toggle__bars::before, .nav-toggle__bars::after { content: ""; position: absolute; left: 0; }
+.nav-toggle__bars::before { top: -7px; }
+.nav-toggle__bars::after  { top: 7px; }
+.nav-toggle[aria-expanded="true"] .nav-toggle__bars { background: transparent; }
+.nav-toggle[aria-expanded="true"] .nav-toggle__bars::before { transform: translateY(7px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] .nav-toggle__bars::after  { transform: translateY(-7px) rotate(-45deg); }
+
+.primary-nav__list {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.primary-nav__list li { margin: 0; position: relative; }
+
+.primary-nav__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-3);
+  min-height: 44px;
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-weight: 500;
+  color: var(--ink);
+  text-decoration: none;
+  transition: color var(--transition);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.primary-nav__link:hover { color: var(--mic-green); }
+/* Current page is marked by colour and weight rather than a rule, so the bar
+   stays clean. aria-current still carries it for assistive technology. */
+.primary-nav__link[aria-current="page"],
+.primary-nav__item.is-active > .primary-nav__link {
+  color: var(--mic-green);
+  font-weight: 600;
+}
+/* A light, wide chevron rather than a heavy square one: the square is drawn
+   from two 1.5px borders, rotated, then flattened on the Y axis so the mark
+   is wider than it is tall. */
+.primary-nav__caret {
+  width: 8px; height: 8px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: scaleY(.68) rotate(45deg) translate(-2px,-2px);
+  transition: transform var(--transition);
+  flex-shrink: 0;
+}
+.primary-nav__link[aria-expanded="true"] .primary-nav__caret {
+  transform: scaleY(.68) rotate(-135deg) translate(-2px,-2px);
+}
+
+/* Dropdown submenu */
+.primary-nav__submenu {
+  list-style: none;
+  margin: 0;
+  padding: var(--space-2);
+  min-width: 250px;
+}
+.primary-nav__submenu a {
+  display: block;
+  padding: var(--space-3) var(--space-4);
+  min-height: 44px;
+  font-size: var(--fs-sm);
+  color: var(--ink);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid transparent;
+  transition: background-color var(--transition), border-color var(--transition), color var(--transition);
+}
+.primary-nav__submenu a:hover,
+.primary-nav__submenu a[aria-current="page"] {
+  background: var(--mic-green-light);
+  border-left-color: var(--mic-gold);
+  color: var(--mic-green-dark);
+}
+
+.site-header__actions { display: flex; align-items: center; gap: var(--space-3); }
+
+
+/* ==========================================================================
+   07. HERO
+   Full-bleed college photograph under a deep green wash, with the four headline
+   statistics sitting on the image itself.
+   Elementor: one Container with a background image and a background overlay;
+   an inner container for the copy; the statistics as four Counter widgets in
+   a flex row.
+   ========================================================================== */
+.hero {
+  position: relative;
+  isolation: isolate;
+  background: var(--mic-green-darker);
+}
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+}
+.hero__bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 35%;
+}
+/* Two-stop wash: heavy on the left so the copy always clears contrast, lighter
+   on the right so the photograph still reads. The second gradient darkens the
+   base so the statistics stay legible over a busy image. */
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(100deg, rgba(1,36,24,.95) 0%, rgba(1,36,24,.88) 38%, rgba(1,45,29,.62) 100%),
+    linear-gradient(to top, rgba(1,36,24,.9) 0%, rgba(1,36,24,0) 45%);
+}
+.hero__inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 78vh;
+  padding-block: var(--space-10) var(--space-7);
+}
+.hero__content { max-width: 46rem; }
+
+.hero__eyebrow {
+  display: inline-block;
+  margin-bottom: var(--space-5);
+  padding: var(--space-2) var(--space-4);
+  background: rgba(252,182,21,.16);
+  border: 1px solid rgba(252,182,21,.45);
+  border-radius: 100px;
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--mic-gold);
+}
+.hero__title {
+  font-size: clamp(2.125rem, 3.4vw + 1.05rem, 3.5rem);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: #fff;
+  margin-bottom: var(--space-5);
+}
+.hero__title em { font-style: normal; color: var(--mic-gold); }
+.hero__text {
+  font-size: var(--fs-lg);
+  line-height: 1.6;
+  color: rgba(255,255,255,.88);
+  max-width: 54ch;
+  margin-bottom: var(--space-6);
+}
+.hero__actions { display: flex; flex-wrap: wrap; gap: var(--space-4); }
+
+/* Statistics sitting on the photograph */
+.hero__stats {
+  display: flex;
+  flex-wrap: wrap;
+  margin: var(--space-9) 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid rgba(255,255,255,.22);
+}
+.hero__stats li {
+  flex: 1 1 50%;
+  margin: 0;
+  padding: var(--space-5) var(--space-4) 0 0;
+}
+.hero__num {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 1.8vw + .85rem, 2.125rem);
+  font-weight: 700;
+  line-height: 1.05;
+  color: var(--mic-gold);
+  letter-spacing: -0.02em;
+}
+.hero__label {
+  display: block;
+  margin-top: var(--space-1);
+  font-size: var(--fs-sm);
+  line-height: 1.4;
+  color: rgba(255,255,255,.78);
+}
+
+
+/* ==========================================================================
+   08. SECTION HEADING & EYEBROW
+   ========================================================================== */
+.eyebrow {
+  display: block;
+  margin-bottom: var(--space-3);
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--mic-green);
+}
+.section--green .eyebrow { color: var(--mic-gold); }
+
+.section-head { margin-bottom: var(--space-8); max-width: 68ch; }
+.section-head--center { margin-inline: auto; text-align: center; }
+
+.section-head p:last-child { margin-bottom: 0; }
+.section-head .lead { margin-top: var(--space-3); }
+.section--green .section-head .lead { color: rgba(255,255,255,.78); }
+
+
+/* ==========================================================================
+   09. CARDS, ICON BOXES, STATS
+   ========================================================================== */
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+}
+.card__body { padding: var(--space-6); display: flex; flex-direction: column; flex-grow: 1; }
+.card__body > *:last-child { margin-top: auto; }
+.card h3 { margin-bottom: var(--space-3); }
+
+a.card, .card--link { text-decoration: none; color: inherit; }
+.card--link:hover, a.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--mic-gold);
+}
+
+/* Icon box — maps to the Elementor Icon Box widget */
+.icon-box {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: var(--space-6);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+}
+.icon-box:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow);
+  border-color: var(--mic-gold);
+}
+.icon-box__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px; height: 56px;
+  margin-bottom: var(--space-4);
+  background: var(--mic-green-light);
+  border-radius: var(--radius);
+  color: var(--mic-green);
+  flex-shrink: 0;
+}
+.icon-box__icon svg { width: 28px; height: 28px; stroke: currentColor; fill: none; stroke-width: 1.7; }
+.icon-box h3, .icon-box h4 { margin-bottom: var(--space-2); }
+.icon-box p { color: var(--ink-soft); font-size: var(--fs-md); }
+
+/* Compact variant for five-up rows, where each card is about 218px wide and
+   the standard padding and 56px icon crowd the copy out. Only from 1024px,
+   since below that the cards are two or three up and have room to spare. */
+@media (min-width: 1024px) {
+  .icon-box--compact { padding: var(--space-5); }
+  .icon-box--compact .icon-box__icon {
+    width: 44px; height: 44px;
+    margin-bottom: var(--space-3);
+  }
+  .icon-box--compact .icon-box__icon svg { width: 22px; height: 22px; }
+  .icon-box--compact h3 { font-size: var(--fs-md); line-height: 1.3; }
+  .icon-box--compact p  { font-size: var(--fs-sm); }
+}
+
+.section--green .icon-box {
+  background: rgba(255,255,255,.05);
+  border-color: rgba(255,255,255,.14);
+}
+.section--green .icon-box p { color: rgba(255,255,255,.76); }
+.section--green .icon-box__icon { background: rgba(252,182,21,.15); color: var(--mic-gold); }
+.section--green .icon-box:hover { border-color: var(--mic-gold); }
+
+/* Numbered step */
+.step { display: flex; gap: var(--space-5); align-items: flex-start; }
+.step__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px; height: 52px;
+  flex-shrink: 0;
+  background: var(--mic-gold);
+  color: var(--ink);
+  border-radius: 50%;
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: 700;
+}
+.step h3, .step h4 { margin-bottom: var(--space-2); }
+.step p { color: var(--ink-soft); }
+
+/* Fact list — label/value pairs (About page key facts) */
+.fact-list { margin: 0; padding: 0; }
+.fact-list__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+  padding: var(--space-4) 0;
+  border-bottom: 1px solid var(--line);
+}
+.fact-list__row:first-child { border-top: 1px solid var(--line); }
+.fact-list__label {
+  flex: 1 1 190px;
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--mic-green-dark);
+}
+.fact-list__value { flex: 2 1 260px; margin: 0; color: var(--ink-soft); }
+
+/* Highlight / callout panel.
+   A deep-green aside with a gold rule and a gold heading. Deliberately the
+   inverse of the surrounding page so a callout reads as the college speaking
+   directly, rather than as another tinted box. */
+.callout {
+  position: relative;
+  overflow: hidden;
+  padding: var(--space-6) var(--space-6) var(--space-6) var(--space-7);
+  background: var(--mic-green-dark);
+  color: rgba(255,255,255,.85);
+  border-radius: var(--radius-lg);
+  isolation: isolate;
+}
+/* gold rule down the left edge */
+.callout::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 6px;
+  background: var(--mic-gold);
+}
+/* soft brand glow, decorative only */
+.callout::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  right: -60px; top: -80px;
+  width: 260px; height: 260px;
+  background: radial-gradient(circle, rgba(252,182,21,.18) 0%, rgba(252,182,21,0) 70%);
+  pointer-events: none;
+}
+.callout h2, .callout h3, .callout h4 {
+  margin-bottom: var(--space-3);
+  color: var(--mic-gold);
+}
+.callout p { color: rgba(255,255,255,.85); }
+.callout p:last-child { margin-bottom: 0; }
+.callout strong { color: #fff; }
+.callout a:not(.btn) {
+  color: #fff;
+  text-decoration: underline;
+  text-decoration-color: rgba(252,182,21,.7);
+  text-underline-offset: 3px;
+}
+.callout a:not(.btn):hover { color: var(--mic-gold); text-decoration-color: var(--mic-gold); }
+.callout .list-check li::before { background: var(--mic-gold); }
+.callout .list-check li::after { border-color: var(--ink); }
+/* buttons inside a callout always go gold: a green button on green is invisible */
+.callout .btn,
+.callout .btn--green,
+.callout .btn--outline {
+  background: var(--mic-gold);
+  border-color: var(--mic-gold);
+  color: var(--ink);
+}
+.callout .btn:hover,
+.callout .btn--green:hover,
+.callout .btn--outline:hover {
+  background: var(--mic-gold-dark);
+  border-color: var(--mic-gold-dark);
+  color: var(--ink);
+}
+.callout :focus-visible { outline-color: var(--mic-gold); }
+
+/* Fills its column, so callouts sitting side by side (or beside an image)
+   match height instead of each hugging its own text. */
+.callout--fill { height: 100%; }
+
+/* Centres the content vertically as well. Use only when the box is much taller
+   than its text, such as a callout paired with a tall image; for two callouts
+   side by side leave this off so both headings align at the top. */
+.callout--center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Centre of Excellence logo tile.
+   The official centre marks are full-colour, so they sit on a white tile that
+   keeps them legible on both light and dark sections. */
+.centre-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 88px;
+  height: 88px;
+  margin-bottom: var(--space-4);
+  padding: 12px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  flex-shrink: 0;
+}
+.centre-logo img { width: 100%; height: 100%; object-fit: contain; }
+.section--green .centre-logo { border-color: transparent; }
+
+/* --- Pillar card: photo, numbered badge, copy ------------------------------
+   The Malpi Advantage. Replaces six repeating 50/50 bands with one scannable
+   set. Elementor: a container holding Image + Heading + Text, with the number
+   as a small absolutely positioned Heading over the image. */
+.pillar {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.pillar:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+
+.pillar__media {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  background: var(--surface-alt);
+}
+/* absolute, so a square source cannot push the box past its aspect ratio */
+.pillar__media img {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* sits half over the photo, half over the copy, so the two read as one card */
+.pillar__num {
+  position: absolute;
+  left: var(--space-5);
+  bottom: 0;
+  transform: translateY(50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  height: 48px;
+  padding-inline: .35em;
+  border-radius: var(--radius);
+  background: var(--mic-gold);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.pillar__body {
+  flex: 1 1 auto;
+  padding: var(--space-6) var(--space-5) var(--space-6);
+  padding-top: calc(var(--space-6) + 12px);   /* clears the badge overhang */
+}
+.pillar__body h3 { margin-bottom: var(--space-2); }
+.pillar__lead {
+  margin-bottom: var(--space-3);
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--mic-green);
+}
+.pillar__body p:last-child { margin-bottom: 0; color: var(--ink-soft); font-size: var(--fs-sm); }
+
+/* --- In-page jump links ---------------------------------------------------
+   Elementor: a flex container of Button widgets pointing at section anchors. */
+.jump-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin: var(--space-6) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.jump-nav li { margin: 0; }
+.jump-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: var(--space-2) var(--space-5);
+  background: var(--surface);
+  border: 1px solid var(--mic-green);
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--mic-green-dark);
+  text-decoration: none;
+  transition: background-color var(--transition), border-color var(--transition), color var(--transition);
+}
+.jump-nav a:hover {
+  background: var(--mic-green-dark);
+  border-color: var(--mic-green-dark);
+  color: #fff;
+}
+
+
+/* --- Promo card: icon, copy, no image -------------------------------------
+   Elementor: Icon Box, or a container holding Icon + Heading + Text. */
+.promo-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: var(--space-6);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  /* a resting shadow so each card reads as a separate object, not a panel */
+  box-shadow: var(--shadow-sm);
+  text-decoration: none;
+  color: inherit;
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+}
+a.promo-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--mic-gold);
+}
+.promo-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px; height: 52px;
+  margin-bottom: var(--space-5);
+  background: var(--mic-green-light);
+  border-radius: var(--radius);
+  color: var(--mic-green);
+  flex-shrink: 0;
+  transition: background-color var(--transition), color var(--transition);
+}
+.promo-card__icon svg { width: 26px; height: 26px; stroke: currentColor; fill: none; stroke-width: 1.7; }
+a.promo-card:hover .promo-card__icon { background: var(--mic-gold); color: var(--ink); }
+.promo-card h3 {
+  margin-bottom: var(--space-3);
+  font-size: var(--fs-h4);
+  line-height: 1.25;
+}
+.promo-card p {
+  margin-bottom: 0;
+  font-size: var(--fs-sm);
+  line-height: 1.65;
+  color: var(--ink-soft);
+}
+
+
+/* --- Carousel ---------------------------------------------------------------
+   A horizontal scroller, not a JavaScript slideshow. Scrolling, snapping and
+   touch swipe are native CSS and work with no script at all; the arrows and
+   dots are progressive enhancement on top.
+   Elementor: rebuild with the Loop Carousel widget. */
+.carousel { position: relative; }
+.carousel__track {
+  display: flex;
+  gap: var(--space-5);
+  margin: 0;
+  padding-block: var(--space-2) var(--space-6);
+  /* Aligns the first card with the container, and lets the rest run to the
+     edge of the viewport so the next card peeks in. scroll-padding matches the
+     padding so a snapped card lines up with the container rather than resting
+     one gutter along. */
+  --carousel-gutter: max(var(--space-5), calc((100vw - var(--container)) / 2));
+  padding-inline: var(--carousel-gutter);
+  scroll-padding-inline: var(--carousel-gutter);
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.carousel__track::-webkit-scrollbar { display: none; }
+.carousel__track:focus-visible { outline: 3px solid var(--mic-gold); outline-offset: -3px; }
+
+.carousel__item {
+  flex: 0 0 82%;
+  margin: 0;
+  scroll-snap-align: start;
+}
+
+.carousel__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+.carousel__dots { display: flex; gap: var(--space-2); margin: 0; padding: 0; list-style: none; }
+.carousel__dots li { margin: 0; }
+.carousel__dot {
+  width: 28px; height: 28px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.carousel__dot::before {
+  content: "";
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--line-strong);
+  transition: background-color var(--transition), transform var(--transition);
+}
+.carousel__dot[aria-current="true"]::before { background: var(--mic-green-dark); transform: scale(1.3); }
+.carousel__dot:hover::before { background: var(--mic-green); }
+
+.carousel__arrows { display: flex; gap: var(--space-3); margin-left: auto; }
+.carousel__arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px; height: 48px;
+  background: var(--surface-alt);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--mic-green-dark);
+  cursor: pointer;
+  transition: background-color var(--transition), color var(--transition), border-color var(--transition);
+}
+.carousel__arrow:hover {
+  background: var(--mic-green-dark);
+  border-color: var(--mic-green-dark);
+  color: #fff;
+}
+.carousel__arrow svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.8; }
+.carousel__arrow[disabled] {
+  background: var(--surface-alt);
+  border-color: var(--line);
+  color: var(--ink-muted);
+  cursor: default;
+  opacity: .7;
+}
+
+
+/* ==========================================================================
+   10. PROGRAMS
+   ========================================================================== */
+.program-card { position: relative; }
+.program-card__media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--surface-alt);
+}
+.program-card__media img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 400ms cubic-bezier(.4,0,.2,1);
+}
+.card--link:hover .program-card__media img { transform: scale(1.05); }
+.program-card__tag {
+  position: absolute;
+  top: var(--space-3); left: var(--space-3);
+  padding: var(--space-1) var(--space-3);
+  background: var(--mic-gold);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  border-radius: var(--radius-sm);
+}
+.program-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  margin-bottom: var(--space-3);
+  font-size: var(--fs-sm);
+  color: var(--ink-muted);
+}
+.program-card__meta span { display: inline-flex; align-items: center; gap: var(--space-2); }
+.program-card__meta svg { width: 15px; height: 15px; stroke: var(--mic-green); fill: none; stroke-width: 1.8; flex-shrink: 0; }
+.program-card p { color: var(--ink-soft); margin-bottom: var(--space-5); }
+/* Quarter-width cards: trim the body padding so four fit without towering */
+.program-card .card__body { padding: var(--space-5); }
+
+/* Concentration pills */
+.pill-list { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: 0 0 var(--space-4); padding: 0; list-style: none; }
+.pill-list li { margin: 0; }
+.pill {
+  display: inline-block;
+  padding: var(--space-2) var(--space-4);
+  background: var(--mic-green-light);
+  border: 1px solid rgba(1,102,62,.18);
+  border-radius: 100px;
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--mic-green-dark);
+  white-space: nowrap;      /* a concentration name must not wrap mid-label */
+}
+.section--green .pill {
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.2);
+  color: #fff;
+}
+
+
+/* ==========================================================================
+   11. PEOPLE (TEAM)
+   ========================================================================== */
+.person {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.person:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+.person__photo {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: var(--mic-green-light);
+}
+.person__photo img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+.person__body { padding: var(--space-5); }
+.person__name {
+  margin-bottom: var(--space-1);
+  font-family: var(--font-display);
+  font-size: var(--fs-h4);
+  font-weight: 600;
+  color: var(--mic-green-dark);
+}
+.person__role {
+  margin-bottom: var(--space-3);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--mic-gold-dark);
+}
+.person__bio { font-size: var(--fs-sm); color: var(--ink-soft); line-height: 1.6; margin: 0; }
+
+/* Long board biographies: keep the card compact, with the full published text
+   one click away. Native details/summary, so it works without JavaScript and
+   maps onto the Elementor Toggle widget. */
+.person__more { margin-top: var(--space-3); }
+.person__more summary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--mic-green);
+  cursor: pointer;
+  list-style: none;
+}
+.person__more summary::-webkit-details-marker { display: none; }
+.person__more summary::after {
+  content: "";
+  width: 8px; height: 8px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg) translate(-1px,-1px);
+  transition: transform var(--transition);
+}
+.person__more[open] summary::after { transform: rotate(-135deg) translate(-2px,-2px); }
+.person__more summary:hover { color: var(--mic-green-dark); text-decoration: underline; }
+.person__more p {
+  margin: var(--space-2) 0 0;
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+
+/* Signed message from the Chairman or Principal: portrait beside the letter. */
+.message__portrait {
+  margin: 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.message__portrait img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  object-position: top center;
+}
+.message__portrait figcaption {
+  padding: var(--space-4) var(--space-5);
+  border-top: 3px solid var(--mic-gold);
+}
+.message__name {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--fs-h4);
+  font-weight: 600;
+  color: var(--mic-green-dark);
+}
+.message__role {
+  display: block;
+  margin-top: 2px;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--mic-gold-dark);
+}
+.message__signoff {
+  margin-top: var(--space-6);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--line);
+  color: var(--ink-soft);
+}
+.message__signoff strong {
+  font-family: var(--font-display);
+  font-size: var(--fs-lg);
+  color: var(--mic-green-dark);
+}
+/* Keep the portrait alongside the letter as it scrolls on a long message */
+@media (min-width: 1024px) {
+  .message__portrait { position: sticky; top: calc(var(--header-h) + var(--space-5)); }
+}
+
+
+/* ==========================================================================
+   12. PARTNER LOGOS
+   ========================================================================== */
+.partner-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.partner-grid li {
+  flex: 1 1 40%;
+  margin: 0;
+}
+.partner-grid__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  padding: var(--space-4);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.partner-grid__item:hover { border-color: var(--mic-gold); box-shadow: var(--shadow-sm); }
+.partner-grid__item img {
+  max-height: 56px;
+  width: auto;
+  object-fit: contain;
+  /* Full colour at rest; desaturates on hover so the pointed-at logo recedes
+     and the row reads as one set rather than a wall of competing brands. */
+  filter: grayscale(0);
+  opacity: 1;
+  transition: filter var(--transition), opacity var(--transition);
+}
+.partner-grid__item:hover img { filter: grayscale(100%); opacity: .72; }
+
+
+/* Synergy Council block */
+.council {
+  padding: var(--space-6);
+  margin-bottom: var(--space-6);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--mic-gold);
+  border-radius: var(--radius-lg);
+}
+.council:last-child { margin-bottom: 0; }
+.council__head { display: flex; gap: var(--space-5); align-items: flex-start; margin-bottom: var(--space-5); }
+.council__head .icon-box__icon { margin-bottom: 0; }
+.council__head h3 { margin-bottom: var(--space-2); }
+.council__head p { color: var(--ink-soft); margin-bottom: 0; }
+.council .table-wrap { margin-bottom: 0; }
+
+/* Partner category group */
+.partner-cat { margin-bottom: var(--space-8); }
+.partner-cat:last-child { margin-bottom: 0; }
+.partner-cat__title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--line);
+  font-size: var(--fs-h4);
+}
+.partner-cat__title .icon-box__icon {
+  width: 40px; height: 40px;
+  margin-bottom: 0;
+  flex-shrink: 0;
+}
+.partner-cat__title .icon-box__icon svg { width: 20px; height: 20px; }
+.partner-cat__count {
+  margin-left: auto;
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  font-weight: 400;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+
+/* ==========================================================================
+   POSTS: cards, listings, article body, notice board
+   Elementor: the cards map onto Loop Grid / Posts widgets, the notice board
+   onto a container with an Icon List.
+   ========================================================================== */
+
+/* --- Post card ------------------------------------------------------------ */
+.post-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--surface);
+  text-decoration: none;
+  color: inherit;
+}
+.post-card__media {
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--surface-alt);
+  margin-bottom: var(--space-4);
+}
+.post-card__media img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 400ms cubic-bezier(.4,0,.2,1);
+}
+.post-card:hover .post-card__media img { transform: scale(1.05); }
+
+.post-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  margin-bottom: var(--space-2);
+  font-size: var(--fs-sm);
+  color: var(--ink-muted);
+}
+.post-card__cat {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--fs-xs);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--mic-green);
+}
+.post-card__title {
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-display);
+  font-size: var(--fs-h4);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--mic-green-dark);
+}
+.post-card:hover .post-card__title { color: var(--mic-green); }
+.post-card__excerpt {
+  margin: 0 0 var(--space-4);
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+/* the short rule under each card, as in the reference layout */
+.post-card__rule {
+  margin-top: auto;
+  width: 44px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--mic-gold);
+  transition: width var(--transition);
+}
+.post-card:hover .post-card__rule { width: 72px; }
+
+/* --- Post tile: image fills the card, text sits over a scrim --------------
+   Used in the home page News & Events band. Elementor: a Loop Grid item with
+   a background image and an overlay, or an Image Box with an overlay. */
+.post-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  min-height: 320px;
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  text-decoration: none;
+  color: #fff;
+}
+.post-tile__img {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 500ms cubic-bezier(.4,0,.2,1);
+}
+.post-tile:hover .post-tile__img { transform: scale(1.05); }
+.post-tile__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top,
+    rgba(1,36,24,.95) 0%, rgba(1,36,24,.78) 40%, rgba(1,36,24,.22) 100%);
+}
+/* lift the text above the absolutely positioned image and scrim */
+.post-tile__cat,
+.post-tile__date,
+.post-tile__title { position: relative; }
+.post-tile__cat {
+  align-self: flex-start;
+  margin-bottom: auto;
+  padding: .35em .85em;
+  border-radius: 999px;
+  background: var(--mic-gold);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.post-tile__date {
+  margin: var(--space-6) 0 var(--space-2);
+  font-size: var(--fs-sm);
+  color: rgba(255,255,255,.85);
+}
+.post-tile__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--fs-h4);
+  font-weight: 600;
+  line-height: 1.35;
+  color: #fff;
+}
+.post-tile:hover .post-tile__title { text-decoration: underline; text-underline-offset: 3px; }
+
+/* --- Section head with a trailing link ------------------------------------ */
+.section-head--split {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+  max-width: none;
+}
+.link-more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding-bottom: 2px;
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  color: var(--mic-green-dark);
+  text-decoration: none;
+  border-bottom: 3px solid var(--mic-gold);
+}
+.link-more:hover { color: var(--mic-green); border-bottom-color: var(--mic-green); }
+.link-more span { transition: transform var(--transition); }
+.link-more:hover span { transform: translateX(4px); }
+/* the default dark green would disappear on a green band */
+.section--green .link-more { color: #fff; }
+.section--green .link-more:hover { color: var(--mic-gold); border-bottom-color: var(--mic-gold); }
+
+/* --- Notice strip --------------------------------------------------------
+   Four notices side by side under the news tiles. Elementor: a container with
+   four inner containers, each an Icon List item or a Text Editor. */
+.notice-strip {
+  margin-top: var(--space-7);
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  background: rgba(255,255,255,.08);
+}
+.notice-strip__head {
+  margin: 0 0 var(--space-5);
+  font-family: var(--font-display);
+  font-size: var(--fs-h4);
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--mic-gold);
+}
+.notice-strip__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-5);
+  margin: 0; padding: 0;
+  list-style: none;
+}
+.notice-strip__list > li { flex: 1 1 100%; min-width: 0; }
+.notice-strip__link {
+  display: block;
+  padding-left: var(--space-4);
+  border-left: 3px solid var(--mic-gold);
+  text-decoration: none;
+  color: inherit;
+}
+.notice-strip__link:hover .notice-strip__title { text-decoration: underline; }
+.notice-strip__title {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--mic-green-dark);
+}
+.notice-strip__meta {
+  display: block;
+  margin-top: var(--space-1);
+  font-size: var(--fs-sm);
+  color: var(--ink-muted);
+}
+/* On the green band the dark text would vanish, so lift it there only. */
+.section--green .notice-strip__link .notice-strip__title { color: #fff; }
+.section--green .notice-strip__link .notice-strip__meta  { color: rgba(255,255,255,.78); }
+.section--green .notice-strip__link:hover .notice-strip__title { color: var(--mic-gold); }
+
+/* --- Article body --------------------------------------------------------- */
+.post-hero { border-radius: var(--radius-lg); overflow: hidden; margin: 0 0 var(--space-7); }
+.post-hero img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; }
+.post-body > p { font-size: var(--fs-md); line-height: 1.75; margin-bottom: var(--space-5); }
+.post-body > p:first-of-type {
+  font-size: var(--fs-lg);
+  line-height: 1.65;
+  color: var(--ink-soft);
+}
+.post-meta-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-5);
+  border-bottom: 1px solid var(--line);
+  font-size: var(--fs-sm);
+  color: var(--ink-muted);
+}
+.post-gallery { display: flex; flex-wrap: wrap; gap: var(--space-4); margin: var(--space-7) 0 0; padding: 0; list-style: none; }
+.post-gallery li { flex: 1 1 calc(50% - (var(--space-4) / 2)); margin: 0; }
+.post-gallery figure { margin: 0; border-radius: var(--radius); overflow: hidden; }
+.post-gallery img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; }
+
+.post-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-top: var(--space-8);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--line);
+}
+/* Marks copy written for this build rather than taken from the live site */
+.draft-note {
+  margin-bottom: var(--space-6);
+  padding: var(--space-4) var(--space-5);
+  background: var(--mic-gold-soft);
+  border-left: 4px solid var(--mic-gold);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-size: var(--fs-sm);
+  color: var(--ink-soft);
+}
+
+
+/* ==========================================================================
+   13. ACCORDION (FAQ)
+   Uses native <details>/<summary> — keyboard accessible with no JS, and maps
+   directly onto the Elementor Accordion / Toggle widget.
+   ========================================================================== */
+.accordion { border-top: 1px solid var(--line); }
+.accordion__item { border-bottom: 1px solid var(--line); }
+.accordion__item[open] { background: var(--surface-warm); }
+
+.accordion__q {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-5) var(--space-4);
+  min-height: 44px;
+  font-family: var(--font-display);
+  font-size: var(--fs-h4);
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--mic-green-dark);
+  cursor: pointer;
+  list-style: none;
+  transition: color var(--transition), background-color var(--transition);
+}
+.accordion__q::-webkit-details-marker { display: none; }
+.accordion__q:hover { color: var(--mic-green); background: var(--surface-alt); }
+
+.accordion__icon {
+  position: relative;
+  flex-shrink: 0;
+  width: 26px; height: 26px;
+  margin-top: .15em;
+  border-radius: 50%;
+  background: var(--mic-gold);
+}
+.accordion__icon::before, .accordion__icon::after {
+  content: "";
+  position: absolute;
+  left: 50%; top: 50%;
+  background: var(--ink);
+  border-radius: 1px;
+  transform: translate(-50%,-50%);
+  transition: opacity var(--transition), transform var(--transition);
+}
+.accordion__icon::before { width: 12px; height: 2px; }
+.accordion__icon::after  { width: 2px; height: 12px; }
+.accordion__item[open] .accordion__icon::after { opacity: 0; transform: translate(-50%,-50%) rotate(90deg); }
+
+.accordion__a {
+  padding: 0 var(--space-4) var(--space-6);
+  max-width: 76ch;
+  color: var(--ink-soft);
+}
+.accordion__a p:last-child { margin-bottom: 0; }
+
+
+/* ==========================================================================
+   14. VIDEO TESTIMONIALS
+   Click-to-load facade: no third-party iframe until the visitor asks for it,
+   which keeps the page fast and avoids loading trackers on arrival.
+   ========================================================================== */
+.video-card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--mic-green-dark);
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.video-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.video-card img { width: 100%; height: 100%; object-fit: cover; opacity: .85; transition: opacity var(--transition); }
+.video-card:hover img { opacity: 1; }
+.video-card iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+.video-card__play {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%,-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px; height: 72px;
+  background: var(--mic-gold);
+  border-radius: 50%;
+  box-shadow: 0 6px 24px rgba(0,0,0,.35);
+  transition: transform var(--transition);
+  pointer-events: none;
+}
+.video-card:hover .video-card__play { transform: translate(-50%,-50%) scale(1.08); }
+.video-card__play svg { width: 26px; height: 26px; fill: var(--ink); margin-left: 3px; }
+
+.video-card__label {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: var(--space-7) var(--space-5) var(--space-4);
+  background: linear-gradient(to top, rgba(1,36,24,.92), rgba(1,36,24,0));
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  text-align: left;
+  pointer-events: none;
+}
+
+
+/* ==========================================================================
+   15. TABLES
+   Wrapped in .table-wrap so wide tables scroll inside their own box rather
+   than forcing the page to scroll sideways.
+   ========================================================================== */
+.table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  margin-bottom: var(--space-5);
+}
+.table {
+  width: 100%;
+  min-width: 520px;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+  background: var(--surface);
+}
+.table caption {
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  font-size: var(--fs-sm);
+  color: var(--ink-muted);
+  border-bottom: 1px solid var(--line);
+}
+.table th, .table td {
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--line);
+}
+.table thead th {
+  background: var(--mic-green-dark);
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  letter-spacing: .02em;
+  border-bottom: 0;
+  position: sticky;
+  top: 0;
+}
+.table tbody tr:nth-child(even) { background: var(--surface-alt); }
+.table tbody tr:last-child td { border-bottom: 0; }
+.table td:first-child { font-weight: 500; color: var(--ink); }
+
+/* Semester course table variant */
+.table--courses td:last-child, .table--courses th:last-child { text-align: right; white-space: nowrap; }
+
+/* Group heading row inside concentration / elective tables */
+.table__group td {
+  background: var(--mic-green-light);
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--mic-green-dark);
+  border-top: 2px solid var(--mic-green);
+}
+
+/* "Beyond course content / experiential learning / skills" tables.
+   These are lists of activities, not numbers, so they read left-aligned and
+   need no right-hand credits column. */
+.table--beyond { min-width: 480px; }
+.table--beyond td { color: var(--ink-soft); }
+.table--beyond thead th {
+  background: var(--mic-gold);
+  color: var(--ink);
+  font-size: var(--fs-xs);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.table--beyond td:first-child { font-weight: 400; }
+
+/* Course-structure accordion (matches the toggles on mic.edu.np) */
+.accordion--courses { border-top: 1px solid var(--line); }
+.accordion--courses .accordion__q { font-size: var(--fs-h4); }
+.accordion--courses .accordion__a { max-width: none; padding-bottom: var(--space-5); }
+.accordion--courses .accordion__a .table-wrap:last-child { margin-bottom: 0; }
+.accordion__item--wide[open] { background: var(--surface); }
+
+/* Two columns of toggle cards. Elementor: a flex container with two inner
+   containers, each holding a Toggle widget. One column below 1024px, where a
+   half-width course table would be too cramped to read. */
+.accordion-cols__col { flex: 1 1 100%; min-width: 0; }
+
+.accordion--cards { border-top: 0; }
+.accordion--cards .accordion__item {
+  margin-bottom: var(--space-4);
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition);
+}
+.accordion--cards .accordion__item:last-child { margin-bottom: 0; }
+.accordion--cards .accordion__item:hover,
+.accordion--cards .accordion__item[open] { box-shadow: var(--shadow); }
+
+.accordion--cards .accordion__q {
+  align-items: center;
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+}
+.accordion--cards .accordion__q:hover { background: transparent; }
+
+/* A bare "+" mark rather than the filled disc used on the FAQ accordion. */
+.accordion--cards .accordion__icon {
+  width: 20px; height: 20px;
+  margin-top: 0;
+  background: none;
+  border-radius: 0;
+}
+.accordion--cards .accordion__icon::before,
+.accordion--cards .accordion__icon::after { background: var(--mic-gold-deep); }
+.accordion--cards .accordion__icon::before { width: 20px; height: 2px; }
+.accordion--cards .accordion__icon::after  { width: 2px;  height: 20px; }
+
+.accordion--cards .accordion__a { padding: 0 var(--space-5) var(--space-5); }
+/* Half-width columns leave ~518px of panel, so relax the table floor to match
+   the beyond-course table and keep the desktop view scroll-free. */
+.accordion--cards .table { min-width: 480px; }
+
+/* Concentrations, electives and other long tables, full width under the grid */
+.accordion--cards-full { margin-top: var(--space-4); }
+.table--courses tfoot td {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--mic-green-dark);
+  background: var(--mic-green-light);
+  border-top: 2px solid var(--mic-green);
+}
+
+
+/* ==========================================================================
+   16. FORMS
+   ========================================================================== */
+.form { max-width: 100%; }
+.form__row { display: flex; flex-wrap: wrap; gap: var(--space-5); }
+.form__group { flex: 1 1 100%; margin-bottom: var(--space-5); min-width: 0; }
+
+.form__label {
+  display: block;
+  margin-bottom: var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--mic-green-dark);
+}
+.form__req { color: var(--error); margin-left: 2px; }
+
+.form__control {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  padding: var(--space-3) var(--space-4);
+  font-family: var(--font-body);
+  font-size: var(--fs-base);      /* 16px — stops iOS zooming on focus */
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.form__control:hover { border-color: var(--ink-muted); }
+.form__control:focus {
+  outline: none;
+  border-color: var(--mic-green);
+  box-shadow: 0 0 0 3px rgba(1,102,62,.16);
+}
+textarea.form__control { min-height: 140px; resize: vertical; }
+select.form__control {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='none' stroke='%234A4A4A' stroke-width='1.6' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--space-4) center;
+  background-size: 12px;
+  padding-right: var(--space-8);
+}
+
+.form__hint { display: block; margin-top: var(--space-2); font-size: var(--fs-sm); color: var(--ink-muted); }
+
+/* Inline error, shown next to the field it belongs to */
+.form__error {
+  display: none;
+  margin-top: var(--space-2);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--error);
+}
+.form__group.has-error .form__control { border-color: var(--error); }
+.form__group.has-error .form__control:focus { box-shadow: 0 0 0 3px rgba(179,38,30,.16); }
+.form__group.has-error .form__error { display: block; }
+
+.form__consent { display: flex; align-items: flex-start; gap: var(--space-3); }
+.form__consent input[type="checkbox"] {
+  width: 20px; height: 20px;
+  margin-top: 3px;
+  flex-shrink: 0;
+  accent-color: var(--mic-green);
+}
+.form__consent label { font-size: var(--fs-sm); color: var(--ink-soft); margin: 0; }
+
+.form__status {
+  display: none;
+  margin-top: var(--space-5);
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius);
+  font-weight: 500;
+}
+.form__status.is-visible { display: block; }
+.form__status--success {
+  background: var(--mic-green-light);
+  border-left: 4px solid var(--success);
+  color: var(--mic-green-dark);
+}
+
+.form-note {
+  margin-top: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface-alt);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius);
+  font-size: var(--fs-sm);
+  color: var(--ink-muted);
+}
+
+
+/* ==========================================================================
+   17. PAGE HEADER & BREADCRUMB
+   ========================================================================== */
+.page-header {
+  position: relative;
+  padding-block: var(--space-8) var(--space-9);
+  background: var(--mic-green-dark);
+  color: rgba(255,255,255,.85);
+  overflow: hidden;
+}
+.page-header::before {
+  content: "";
+  position: absolute;
+  top: -40%; right: -10%;
+  width: 46vw; height: 46vw;
+  max-width: 560px; max-height: 560px;
+  background: radial-gradient(circle, rgba(252,182,21,.14) 0%, rgba(252,182,21,0) 70%);
+  pointer-events: none;
+}
+.page-header__inner { position: relative; max-width: 74ch; }
+.page-header h1 { color: #fff; margin-bottom: var(--space-4); }
+.page-header p { color: rgba(255,255,255,.8); font-size: var(--fs-lg); margin-bottom: 0; }
+
+.breadcrumb { margin-bottom: var(--space-5); font-size: var(--fs-sm); }
+.breadcrumb ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0; padding: 0;
+  list-style: none;
+}
+.breadcrumb li { margin: 0; display: flex; align-items: center; gap: var(--space-2); color: rgba(255,255,255,.6); }
+.breadcrumb li + li::before { content: "/"; color: rgba(255,255,255,.35); }
+.breadcrumb a { color: rgba(255,255,255,.8); text-decoration: none; }
+.breadcrumb a:hover { color: var(--mic-gold); text-decoration: underline; }
+.breadcrumb [aria-current="page"] { color: var(--mic-gold); }
+
+
+/* ==========================================================================
+   18. CTA BAND
+   Gold, not green. Every other full-width band on the site is green, so a
+   green call to action disappeared into the page. Switching temperature makes
+   it read as the one place you are being asked to act.
+   ========================================================================== */
+.cta-band {
+  position: relative;
+  background: var(--mic-gold);
+  color: var(--ink);
+  border-top: 6px solid var(--mic-green-dark);
+  overflow: hidden;
+}
+/* soft deeper-gold wash, decorative only */
+.cta-band::before {
+  content: "";
+  position: absolute;
+  right: -6%; top: -70%;
+  width: 46vw; height: 46vw;
+  max-width: 540px; max-height: 540px;
+  background: radial-gradient(circle, rgba(224,160,12,.55) 0%, rgba(224,160,12,0) 70%);
+  pointer-events: none;
+}
+.cta-band__inner {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  padding-block: var(--space-8);
+}
+.cta-band__text { flex: 1 1 420px; }
+.cta-band h2 {
+  color: var(--mic-green-dark);
+  margin-bottom: var(--space-3);
+}
+.cta-band p {
+  color: rgba(26,26,26,.82);
+  margin-bottom: 0;
+  max-width: 56ch;
+}
+.cta-band__actions { display: flex; flex-wrap: wrap; gap: var(--space-4); }
+
+/* Primary action goes deep green so it reads as a button on the gold field */
+.cta-band .btn--primary {
+  background: var(--mic-green-dark);
+  border-color: var(--mic-green-dark);
+  color: #fff;
+}
+.cta-band .btn--primary:hover {
+  background: var(--mic-green);
+  border-color: var(--mic-green);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(1,61,38,.3);
+}
+/* Secondary becomes an ink outline, since a white outline vanishes on gold */
+.cta-band .btn--ghost-light {
+  background: transparent;
+  border-color: rgba(26,26,26,.45);
+  color: var(--ink);
+}
+.cta-band .btn--ghost-light:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--mic-gold);
+}
+.cta-band :focus-visible { outline-color: var(--mic-green-dark); }
+
+
+/* ==========================================================================
+   19. GALLERY
+   Flex-wrap masonry-lite: no CSS Grid, so it rebuilds as an Elementor Gallery.
+   ========================================================================== */
+.gallery { display: flex; flex-wrap: wrap; gap: var(--space-4); margin: 0; padding: 0; list-style: none; }
+.gallery li { flex: 1 1 45%; margin: 0; }
+.gallery__item {
+  display: block;
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--surface-alt);
+}
+.gallery__item img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 400ms cubic-bezier(.4,0,.2,1);
+}
+.gallery__item:hover img { transform: scale(1.06); }
+
+
+/* ==========================================================================
+   20. SITE FOOTER
+   ========================================================================== */
+.site-footer {
+  background: var(--mic-green-darker);
+  color: rgba(255,255,255,.72);
+  font-size: var(--fs-sm);
+}
+.site-footer__main { padding-block: var(--space-9) var(--space-7); }
+.site-footer__row { display: flex; flex-wrap: wrap; gap: var(--space-8); }
+.site-footer__brand { flex: 1 1 100%; }
+.site-footer__col   { flex: 1 1 100%; }
+
+.site-footer__logo img { height: 68px; width: auto; margin-bottom: var(--space-4); }
+.site-footer__tagline { color: rgba(255,255,255,.7); max-width: 42ch; margin-bottom: var(--space-5); }
+
+.site-footer h2, .site-footer h3 {
+  margin-bottom: var(--space-4);
+  font-size: var(--fs-base);
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #fff;
+}
+.site-footer__list { margin: 0; padding: 0; list-style: none; }
+.site-footer__list li { margin-bottom: var(--space-3); }
+.site-footer__list a {
+  color: rgba(255,255,255,.72);
+  text-decoration: none;
+  display: inline-block;
+  padding-block: 2px;
+}
+.site-footer__list a:hover { color: var(--mic-gold); text-decoration: underline; }
+
+.site-footer__contact { margin: 0; padding: 0; list-style: none; }
+.site-footer__contact li {
+  display: flex;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+  line-height: 1.55;
+}
+.site-footer__contact svg {
+  width: 18px; height: 18px;
+  flex-shrink: 0;
+  margin-top: 3px;
+  stroke: var(--mic-gold);
+  fill: none;
+  stroke-width: 1.7;
+}
+.site-footer__contact a { color: rgba(255,255,255,.85); text-decoration: none; }
+.site-footer__contact a:hover { color: var(--mic-gold); text-decoration: underline; }
+
+/* Social links. Default colours are for a light background; add
+   .social-links--on-dark in the footer or on any dark panel. */
+.social-links { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+.social-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px; height: 44px;
+  background: var(--mic-green-light);
+  border: 1px solid rgba(1,61,38,.55);  /* clears 3:1 against white, per non-text contrast */
+  border-radius: 50%;
+  color: var(--mic-green-dark);
+  transition: background-color var(--transition), color var(--transition), border-color var(--transition);
+}
+.social-links a:hover {
+  background: var(--mic-green-dark);
+  border-color: var(--mic-green-dark);
+  color: #fff;
+}
+.social-links svg { width: 18px; height: 18px; fill: currentColor; }
+
+.social-links--on-dark a { background: transparent; border-color: rgba(255,255,255,.22); color: rgba(255,255,255,.8); }
+.social-links--on-dark a:hover { background: var(--mic-gold); border-color: var(--mic-gold); color: var(--ink); }
+
+.site-footer .social-links { margin-top: var(--space-5); }
+
+.site-footer__bottom {
+  padding-block: var(--space-5);
+  border-top: 1px solid rgba(255,255,255,.12);
+}
+.site-footer__bottom-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  font-size: var(--fs-xs);
+  color: rgba(255,255,255,.6);
+}
+.site-footer__legal { display: flex; flex-wrap: wrap; gap: var(--space-5); margin: 0; padding: 0; list-style: none; }
+.site-footer__legal li { margin: 0; }
+.site-footer__legal a { color: rgba(255,255,255,.6); text-decoration: none; }
+.site-footer__legal a:hover { color: var(--mic-gold); text-decoration: underline; }
+
+/* Back-to-top */
+.to-top {
+  position: fixed;
+  right: var(--space-5);
+  bottom: var(--space-5);
+  z-index: 90;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px; height: 48px;
+  background: var(--mic-gold);
+  color: var(--ink);
+  border: 0;
+  border-radius: 50%;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: opacity var(--transition), transform var(--transition), visibility var(--transition);
+}
+.to-top.is-visible { opacity: 1; visibility: visible; transform: translateY(0); }
+.to-top:hover { background: var(--mic-gold-dark); }
+.to-top svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2.2; }
+
+
+/* ==========================================================================
+   21. UTILITIES
+   ========================================================================== */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+.text-center { text-align: center; }
+.mt-0 { margin-top: 0; }
+.mb-0 { margin-bottom: 0; }
+.mb-4 { margin-bottom: var(--space-4); }
+.mb-5 { margin-bottom: var(--space-5); }
+.mb-6 { margin-bottom: var(--space-6); }
+.mb-7 { margin-bottom: var(--space-7); }
+.mt-6 { margin-top: var(--space-6); }
+.mt-7 { margin-top: var(--space-7); }
+
+.media-frame { border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); }
+.media-frame img { width: 100%; }
+/* Landscape crop, so a square source photo does not tower over the column
+   beside it. */
+.media-frame--wide { aspect-ratio: 4 / 3; }
+.media-frame--wide img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Map embed: fills its frame, shorter on phones so it does not dominate.
+   Elementor: a Google Maps widget with the same heights per breakpoint. */
+.map-embed { display: block; width: 100%; height: 320px; border: 0; }
+
+/* Marks a placeholder that the client still has to replace */
+.needs-replacement { outline: 2px dashed var(--mic-gold); outline-offset: 3px; }
+
+.anchor-offset { scroll-margin-top: calc(var(--header-h) + 24px); }
+
+
+/* ==========================================================================
+   22. RESPONSIVE
+   Mobile-first. Everything above is the small-screen layout; these blocks
+   progressively widen it.
+   ========================================================================== */
+
+/* --- Even card heights ---
+   Flexbox equalises items within a flex line but not between wrapped lines, so
+   a 3 + 3 grid ends up with two different row heights. Two things address that:
+   the line reserves below, which get cards close to level on their own, and the
+   equaliser in main.js, which levels them exactly at any width.
+   Elementor note: rebuild this with the container's own Equal Height setting,
+   or keep these min-heights on the Heading and Text widgets.
+   Only applied from 600px up, where cards actually sit side by side. */
+@media (min-width: 600px) {
+  /* 2 lines of heading (line-height 1.15) */
+  .icon-box h3,
+  .card h3,
+  .person__name { min-height: 2.3em; }
+
+  /* A baseline reserve so cards are close to level even before the equaliser
+     in main.js runs (and if JavaScript is unavailable). */
+  .icon-box p { min-height: 4.95em; }  /* 3 lines at 1.65 */
+
+  /* person cards: role and organisation each reserve 2 lines */
+  .person__role { min-height: 3.3em; }   /* 2 lines at 1.65 */
+  .person__bio  { min-height: 3.2em; }
+}
+
+/* --- Small tablets and up --- */
+@media (min-width: 600px) {
+  .carousel__item { flex-basis: 46%; }
+  .col-half       { flex: 1 1 calc(50% - (var(--row-gap) / 2)); }
+  .col-third      { flex: 1 1 calc(50% - (var(--row-gap) / 2)); }
+  .col-quarter    { flex: 1 1 calc(50% - (var(--row-gap) / 2)); }
+  .col-fifth      { flex: 1 1 calc(50% - (var(--row-gap) / 2)); }
+  .form__group--half { flex: 1 1 calc(50% - (var(--space-5) / 2)); }
+  .partner-grid li   { flex: 1 1 calc(33.333% - (var(--space-4) * 2 / 3)); }
+  .gallery li        { flex: 1 1 calc(33.333% - (var(--space-4) * 2 / 3)); }
+  .hero__stats li    { flex: 1 1 25%; }
+}
+
+/* Tablets: three cards across is too cramped, and the tighter column makes
+   headings and copy wrap unpredictably, which is what leaves card rows uneven.
+   Two across reads better and keeps every card the same height.
+   .row--sidebar is excluded: those rows pair a wide column with a narrow one. */
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .row:not(.row--sidebar) > .col-third {
+    flex: 1 1 calc(50% - (var(--row-gap) / 2));
+  }
+  /* Quantity query: a row of exactly three keeps three across, otherwise the
+     third card would be orphaned on its own line and stretch to full width. */
+  .row > .col-third:first-child:nth-last-child(3),
+  .row > .col-third:first-child:nth-last-child(3) ~ .col-third {
+    flex: 1 1 calc(33.333% - (var(--row-gap) * 2 / 3));
+  }
+  /* Image tiles are the exception: three across squeezes them to 229px, so
+     .row--tiles drops back to two. Same specificity, later in the cascade. */
+  .row--tiles > .col-third:first-child:nth-last-child(3),
+  .row--tiles > .col-third:first-child:nth-last-child(3) ~ .col-third {
+    flex: 0 1 calc(50% - (var(--row-gap) / 2));   /* grow 0, as .row--even wants */
+  }
+}
+
+/* --- Tablets / small laptops --- */
+@media (min-width: 768px) {
+  .carousel__item          { flex-basis: 33%; }
+  .post-gallery li         { flex: 1 1 calc(25% - (var(--space-4) * 3 / 4)); }
+  .col-third               { flex: 1 1 calc(33.333% - (var(--row-gap) * 2 / 3)); }
+  .col-fifth               { flex: 1 1 calc(33.333% - (var(--row-gap) * 2 / 3)); }
+  .col-two-thirds          { flex: 1 1 calc(66.666% - (var(--row-gap) / 3)); }
+  .section-head            { margin-bottom: var(--space-9); }
+  .partner-grid li         { flex: 1 1 calc(25% - (var(--space-4) * 3 / 4)); }
+  .gallery li              { flex: 1 1 calc(25% - (var(--space-4) * 3 / 4)); }
+  .notice-strip__list > li { flex: 1 1 calc(50% - (var(--space-5) / 2)); }
+  .map-embed { height: 460px; }
+  .site-footer__brand      { flex: 1 1 calc(50% - (var(--space-8) / 2)); }
+  .site-footer__col        { flex: 1 1 calc(50% - (var(--space-8) / 2)); }
+}
+
+/* --- Desktop: the full navigation replaces the mobile drawer --- */
+@media (min-width: 1024px) {
+  /* just under a quarter, so the next card peeks in and signals scrollability */
+  .carousel__item { flex-basis: 26%; }
+  .col-quarter    { flex: 1 1 calc(25% - (var(--row-gap) * 3 / 4)); }
+  .col-fifth      { flex: 1 1 calc(20% - (var(--row-gap) * 4 / 5)); }
+  .accordion-cols > .accordion-cols__col { flex: 1 1 calc(50% - (var(--row-gap) / 2)); }
+  .notice-strip__list > li { flex: 1 1 calc(25% - (var(--space-5) * 3 / 4)); }
+  .post-tile      { min-height: 380px; }
+  .hero__inner    { min-height: 82vh; }
+  .partner-grid li { flex: 1 1 calc(16.666% - (var(--space-4) * 5 / 6)); }
+  .site-footer__brand      { flex: 1 1 calc(30% - (var(--space-8) * 3 / 4)); }
+  .site-footer__col        { flex: 1 1 calc(20% - (var(--space-8) * 3 / 4)); }
+  .site-footer__col--wide  { flex: 1 1 calc(30% - (var(--space-8) * 3 / 4)); }
+
+  .nav-toggle { display: none; }
+
+  .primary-nav {
+    display: block !important;
+    position: static;
+    width: auto;
+    height: auto;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    overflow: visible;
+    transform: none;
+    visibility: visible;
+  }
+  .primary-nav__list { flex-direction: row; }
+
+  /* Desktop dropdown */
+  .primary-nav__submenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--mic-gold);
+    border-radius: 0 0 var(--radius) var(--radius);
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px);
+    transition: opacity var(--transition), transform var(--transition), visibility var(--transition);
+  }
+  .primary-nav__item:hover > .primary-nav__submenu,
+  .primary-nav__item:focus-within > .primary-nav__submenu,
+  .primary-nav__submenu.is-open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+}
+
+/* Narrow laptops: the six-item nav needs ~1070px at full size, so tighten
+   spacing between 1024px and 1200px rather than dropping to the hamburger. */
+@media (min-width: 1024px) and (max-width: 1199.98px) {
+  .site-header__inner { gap: var(--space-3); }
+  .site-logo img { height: 46px; }
+  .primary-nav__link {
+    padding-left: var(--space-2);
+    padding-right: var(--space-2);
+    font-size: var(--fs-sm);
+  }
+  .site-header__actions { gap: var(--space-2); }
+}
+
+/* --- Mobile navigation drawer (below 1024px) --- */
+@media (max-width: 1023.98px) {
+  .primary-nav {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 200;
+    width: min(92vw, 380px);
+    padding: var(--space-8) var(--space-5) var(--space-9);
+    background: var(--surface);
+    box-shadow: -8px 0 40px rgba(0,0,0,.25);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    transform: translateX(100%);
+    visibility: hidden;
+    /* visibility flips instantly when opening (so the drawer is immediately
+       focusable) but is delayed until the slide-out finishes when closing */
+    transition: transform var(--transition), visibility 0s linear 220ms;
+  }
+  .primary-nav.is-open {
+    transform: translateX(0);
+    visibility: visible;
+    transition: transform var(--transition), visibility 0s linear 0s;
+  }
+
+  .primary-nav__list { flex-direction: column; align-items: stretch; gap: 0; }
+  .primary-nav__list > li { border-bottom: 1px solid var(--line); }
+
+  .primary-nav__link {
+    width: 100%;
+    justify-content: space-between;
+    padding: var(--space-4) var(--space-2);
+    font-size: var(--fs-lg);
+    text-align: left;
+  }
+  .primary-nav__link:hover,
+  .primary-nav__link[aria-current="page"],
+  .primary-nav__item.is-active > .primary-nav__link { color: var(--mic-green); }
+
+  /* Submenus collapse on mobile and are toggled by JS */
+  .primary-nav__submenu {
+    max-height: 0;
+    overflow: hidden;
+    padding: 0 0 0 var(--space-4);
+    border-left: 2px solid var(--mic-gold);
+    margin-bottom: var(--space-2);
+    transition: max-height 300ms ease;
+  }
+  .primary-nav__submenu.is-open { max-height: 460px; }
+
+  .primary-nav__close {
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-4);
+    width: 44px; height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    cursor: pointer;
+    color: var(--ink);
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+  .primary-nav__close:hover { background: var(--surface-alt); }
+
+  /* Scrim behind the drawer */
+  .nav-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 150;
+    background: rgba(1,36,24,.55);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition), visibility var(--transition);
+  }
+  .nav-scrim.is-open { opacity: 1; visibility: visible; }
+
+  body.nav-open { overflow: hidden; }
+}
+
+@media (min-width: 1024px) {
+  .primary-nav__close { display: none; }
+  .nav-scrim { display: none; }
+}
+
+
+/* ==========================================================================
+   23. MOTION & PRINT PREFERENCES
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .btn:hover, .card--link:hover, .icon-box:hover,
+  .person:hover, .video-card:hover { transform: none; }
+}
+
+@media print {
+  .topbar, .site-header, .site-footer, .to-top, .cta-band, .nav-scrim { display: none !important; }
+  body { color: #000; background: #fff; }
+  a { text-decoration: underline; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
+  .section { padding-block: 1.25rem; }
+}

@@ -1,0 +1,64 @@
+# Malpi International College
+
+> Malpi International College (MIC) is a private higher education institution at Narayan Gopal Chowk, Basundhara, Chakrapath, Kathmandu 44600, Nepal. Founded in 1998 by a group of academicians and industrialists, it is an affiliated college of Pokhara University and offers four programmes: BBA, BBA (Finance), BCSIT and MBA. The college provides 100% placement support through its Centre for Career Guidance and Placement and 30+ corporate partners, and awards over NPR 1 Crore in scholarships to new undergraduate students each year. Its teaching philosophy is the ASK principle: Attitude, Skill and Knowledge.
+
+## Key facts
+
+- Full name: Malpi International College (also known as MIC)
+- Founded: 1998, by a group of academicians and industrialists
+- University affiliation: Pokhara University (PU). All four degrees are Pokhara University degrees.
+- Location: Narayan Gopal Chowk, Basundhara, Chakrapath, Kathmandu 44600, Nepal
+- Phone: 01-4372986
+- Email: info@mic.edu.np
+- Tagline: A Tradition of Excellence
+- Language of instruction: English
+- Placement: 100% placement support for BBA, BBA Finance and BCSIT graduates
+- Corporate partners: 30+, including Soaltee Group, Laxmi Group, IJ Group, Nabil Bank, Siddhartha Bank, Muktinath Sewa Bank, Nepal Life Insurance, Smart Solutions, Code Himalaya, ComplianceQuest, Xuno and AMNIL Technologies
+- Annual scholarships: over NPR 1 Crore to new undergraduate students
+
+## Programmes
+
+- [BBA](https://mic.edu.np/bba.html): Bachelor of Business Administration. 4 years, 8 semesters, 120 credit hours. Concentrations in Accounting, Marketing, Finance, Human Resource Management, and IT & Management Science. Internship in Semester VIII (6 credits).
+- [BBA (Finance)](https://mic.edu.np/bba-finance.html): 4 years, 8 semesters. Concentration streams in Corporate Finance, Banking, Insurance, and Investment & Capital Markets. Internship of 6 to 8 weeks scheduled in Semester VI.
+- [BCSIT](https://mic.edu.np/bcsit.html): Bachelor of Computer Systems and Information Technology. 4 years, 8 semesters, 127 credit hours. Concentration tracks in Computing, Data Science, Networking & Cybersecurity, Management Science & Systems, and Multimedia Technology. Covers Artificial Intelligence (CMP 471), Cloud Computing (CMP 382) and Information System Security (CMP 472).
+- [MBA](https://mic.edu.np/mba.html): Master of Business Administration. Trimester based, 6 terms, approximately 2 years, 60 credit hours. Specialisations in Finance, Marketing, Human Resource Management, IT & Business Analytics, and Entrepreneurship & Innovation. Industry Pathway or Research Pathway, then a three-month internship in Term VI.
+- [Compare all programmes](https://mic.edu.np/programs.html)
+
+## Admissions
+
+- [Admissions and scholarships](https://mic.edu.np/admissions.html)
+- Undergraduate entry: completion of 10+2 or equivalent with a minimum C grade in all subjects, plus a pass in the Pokhara University entrance examination. BCSIT accepts any stream.
+- Postgraduate entry (MBA): a Bachelor's degree in any discipline, plus Pokhara University's MBA entrance requirements.
+- Scholarships: Soaltee Academic Excellence Award, Malpi Academic Scholarship, IJ Foundation Purpose Scholarship, Dean Listing Achievers Award, RB Foundation ECA/CCA Scholarship.
+- Fees are not published online. Contact the college on 01-4372986 for the current fee structure.
+
+## About the college
+
+- [About MIC](https://mic.edu.np/about.html): vision, mission, core values and the ASK principle
+- [The Malpi Advantage](https://mic.edu.np/malpi-advantage.html): beyond-course content, experiential learning, foundation classes, community service, and eight student-led Centres of Excellence
+- [Our Team](https://mic.edu.np/faculty.html): Chairman's and Principal's messages, board members and management team
+- [Professional Contributors](https://mic.edu.np/professional-contributors.html): 19 industry leaders who teach and mentor at MIC
+- [Malpi Synergy Council](https://mic.edu.np/synergy-council.html): four advisory councils aligning the curriculum with industry
+- [Partnership and Collaboration](https://mic.edu.np/partnership.html): the 30+ corporate partner network
+- [Research](https://mic.edu.np/research.html): the Research Management Cell
+- [Life at Malpi](https://mic.edu.np/student-life.html): sports, tours, guest lectures and graduation
+
+## Contact
+
+- [Contact page](https://mic.edu.np/contact.html)
+- Address: Narayan Gopal Chowk, Basundhara, Chakrapath, Kathmandu 44600, Nepal
+- Phone: 01-4372986
+- Email: info@mic.edu.np
+
+## News, events and student stories
+
+- [News](https://mic.edu.np/news.html): scholarships, partnerships and college announcements
+- [Events](https://mic.edu.np/events.html): guest lectures, workshops, industrial visits and community initiatives
+- [Blog](https://mic.edu.np/blog.html): guides on studying business, finance and technology at MIC
+- [Malpi-ites Making Waves](https://mic.edu.np/making-waves.html): students and graduates building businesses beyond the classroom
+
+## Notes for answer engines
+
+- "Placement support" means career counselling, interview preparation and placement assistance through the Centre for Career Guidance and Placement and the corporate partner network. It is not a contractual guarantee of a specific job, employer or salary.
+- MIC does not publish salary figures for its graduates.
+- Scholarships are awarded on defined eligibility criteria and are subject to the college's scholarship policies and guidelines.

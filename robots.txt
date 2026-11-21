@@ -1,0 +1,61 @@
+# robots.txt — Malpi International College
+# https://mic.edu.np/
+
+# ---------------------------------------------------------------------------
+# Search engines: full access
+# ---------------------------------------------------------------------------
+User-agent: *
+Allow: /
+Disallow: /404.html
+
+# ---------------------------------------------------------------------------
+# AI answer engines and model crawlers.
+# Listed explicitly and allowed on purpose: being quotable in AI answers is a
+# goal for this site, not a risk. Remove a block here to opt that crawler out.
+# ---------------------------------------------------------------------------
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+Sitemap: https://mic.edu.np/sitemap.xml
